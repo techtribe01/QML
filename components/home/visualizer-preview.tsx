@@ -190,7 +190,7 @@ export function VisualizerPreview() {
             </h2>
             
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Explore the quantum mechanics behind QADS with our interactive Bloch sphere visualizer. 
+              Explore the quantum mechanics behind QADIS with our interactive Bloch sphere visualizer. 
               Configure 2-8 qubits, apply quantum gates, and observe entanglement in real-time.
             </p>
             

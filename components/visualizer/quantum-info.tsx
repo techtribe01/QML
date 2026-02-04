@@ -116,7 +116,7 @@ export function QuantumInfo() {
             <span className="gradient-text">Quantum Computing</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Learn the fundamentals of quantum mechanics that power QADS fraud detection.
+            Learn the fundamentals of quantum mechanics that power QADIS anomaly detection.
           </p>
         </div>
         

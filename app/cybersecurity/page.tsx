@@ -112,7 +112,7 @@ function AttackTimeline() {
             Anatomy of a Breach: Traditional vs Quantum
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            See how QADS detected and blocked a sophisticated APT attack 3 hours before traditional SIEM systems even raised an alert.
+            See how QADIS detected and blocked a sophisticated APT attack 3 hours before traditional SIEM systems even raised an alert.
           </p>
         </div>
 
@@ -203,7 +203,7 @@ function AttackTimeline() {
                     <Shield className="w-5 h-5 text-cyber" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">QADS Quantum</h3>
+                    <h3 className="font-semibold text-foreground">QADIS Quantum</h3>
                     <p className="text-sm text-muted-foreground">4-way entangled detection</p>
                   </div>
                 </div>
@@ -422,7 +422,7 @@ function QuantumDetection() {
       title: "4-Way Entanglement",
       icon: Network,
       content: {
-        description: "QADS creates quantum entanglement between four key network features, detecting correlations invisible to classical systems.",
+        description: "QADIS creates quantum entanglement between four key network features, detecting correlations invisible to classical systems.",
         features: [
           { name: "Source IP", link: "Destination Port", insight: "Unusual service access patterns" },
           { name: "Packet Size", link: "Timing", insight: "Covert channel detection" },
@@ -582,7 +582,7 @@ function QuantumDetection() {
                     { system: "Rule-based IDS", time: "50ms", bar: 40 },
                     { system: "ML Anomaly Detection", time: "120ms", bar: 70 },
                     { system: "Deep Learning", time: "85ms", bar: 55 },
-                    { system: "QADS Quantum Kernel", time: "12ms", bar: 10 },
+                    { system: "QADIS Quantum Kernel", time: "12ms", bar: 10 },
                   ].map((item) => (
                     <div key={item.system}>
                       <div className="flex justify-between mb-1">
@@ -761,7 +761,7 @@ function CybersecurityHero() {
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
-            While traditional SIEM takes hours to correlate attacks, QADS detects intrusions in 23 milliseconds 
+            While traditional SIEM takes hours to correlate attacks, QADIS detects intrusions in 23 milliseconds 
             using 4-way quantum entanglement of network features.
           </p>
 

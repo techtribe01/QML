@@ -16,19 +16,19 @@ const _jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'QADS | Quantum Anomaly Detection System',
-  description: 'Enterprise-grade fraud detection platform leveraging Quantum Machine Learning across Finance, Healthcare, and Cybersecurity domains.',
+  title: 'QADIS | Quantum Anomaly Detection Intelligence System',
+  description: 'Enterprise-grade anomaly detection platform leveraging Quantum Machine Learning across Finance, Healthcare, and Cybersecurity domains.',
   generator: 'v0.app',
-  keywords: ['quantum computing', 'fraud detection', 'machine learning', 'cybersecurity', 'healthcare', 'finance'],
+  keywords: ['quantum computing', 'anomaly detection', 'machine learning', 'cybersecurity', 'healthcare', 'finance', 'QADIS'],
   openGraph: {
-    title: 'QADS | Quantum Anomaly Detection System',
-    description: 'Enterprise-grade fraud detection powered by Quantum Machine Learning',
+    title: 'QADIS | Quantum Anomaly Detection Intelligence System',
+    description: 'Enterprise-grade anomaly detection powered by Quantum Machine Learning',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'QADS | Quantum Anomaly Detection System',
-    description: 'Enterprise-grade fraud detection powered by Quantum Machine Learning',
+    title: 'QADIS | Quantum Anomaly Detection Intelligence System',
+    description: 'Enterprise-grade anomaly detection powered by Quantum Machine Learning',
   },
   icons: {
     icon: [

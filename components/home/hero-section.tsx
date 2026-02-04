@@ -162,7 +162,7 @@ export function HeroSection() {
               mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            QADS leverages Quantum Machine Learning to deliver unprecedented precision 
+            QADIS (Quantum Anomaly Detection Intelligence System) leverages Quantum Machine Learning to deliver unprecedented precision 
             across Finance, Healthcare, and Cybersecurity domains.
           </p>
           

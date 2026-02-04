@@ -96,7 +96,7 @@ export function BenchmarkTable({ benchmarks, domain }: BenchmarkTableProps) {
                 style={{ color: colors.primary }}
               >
                 <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${colors.gradient}`} />
-                QADS Quantum
+                QADIS Quantum
               </div>
               <div className="text-sm font-semibold text-foreground text-center">Improvement</div>
             </div>

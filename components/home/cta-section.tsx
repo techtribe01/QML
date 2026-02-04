@@ -72,7 +72,7 @@ export function CTASection() {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
           >
-            Join leading enterprises already using QADS to protect their operations 
+            Join leading enterprises already using QADIS to protect their operations 
             with next-generation quantum machine learning.
           </p>
 

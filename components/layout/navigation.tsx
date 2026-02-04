@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
@@ -40,11 +41,14 @@ export function Navigation() {
       <nav className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" scroll={true} className="flex items-center gap-3 group">
-          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-lg">
-            <div className="absolute inset-0 bg-gradient-to-br from-finance via-cyber to-healthcare opacity-90 group-hover:opacity-100 transition-opacity" />
-            <span className="relative text-white font-bold text-base">Q</span>
-          </div>
-          <span className="font-semibold text-lg text-foreground tracking-tight">QADS</span>
+          <Image 
+            src="/logo.jpeg" 
+            alt="QADIS Logo" 
+            width={36} 
+            height={36} 
+            className="rounded-lg"
+          />
+          <span className="font-semibold text-lg text-foreground tracking-tight">QADIS</span>
         </Link>
 
         {/* Desktop Navigation */}

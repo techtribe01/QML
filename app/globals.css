@@ -4,10 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* QADS Brand Colors */
-  --qads-blue: #1640FF;
-  --qads-teal: #00C9A7;
-  --qads-purple: #7B61FF;
+  /* QADIS Brand Colors */
+  --qadis-blue: #1640FF;
+  --qadis-teal: #00C9A7;
+  --qadis-purple: #7B61FF;
   
   /* Premium Light Theme - Default */
   --background: #FFFFFF;
@@ -59,10 +59,10 @@
 }
 
 .dark {
-  /* QADS Brand Colors (same in dark) */
-  --qads-blue: #4169FF;
-  --qads-teal: #00E6BE;
-  --qads-purple: #9580FF;
+  /* QADIS Brand Colors (same in dark) */
+  --qadis-blue: #4169FF;
+  --qadis-teal: #00E6BE;
+  --qadis-purple: #9580FF;
   
   /* Base Colors */
   --background: #0A0E1A;
@@ -151,16 +151,16 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   
-  /* QADS Domain Colors */
+  /* QADIS Domain Colors */
   --color-finance: var(--finance);
   --color-finance-foreground: var(--finance-foreground);
   --color-healthcare: var(--healthcare);
   --color-healthcare-foreground: var(--healthcare-foreground);
   --color-cyber: var(--cyber);
   --color-cyber-foreground: var(--cyber-foreground);
-  --color-qads-blue: var(--qads-blue);
-  --color-qads-teal: var(--qads-teal);
-  --color-qads-purple: var(--qads-purple);
+  --color-qadis-blue: var(--qadis-blue);
+  --color-qadis-teal: var(--qadis-teal);
+  --color-qadis-purple: var(--qadis-purple);
 }
 
 @layer base {

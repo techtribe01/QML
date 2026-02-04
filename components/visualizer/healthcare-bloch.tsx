@@ -250,7 +250,7 @@ export function HealthcareBloch() {
   const getPhaseLabel = () => {
     if (progress < 0.2) return "Normal Vitals"
     if (progress < 0.4) return "Subtle Changes"
-    if (progress < 0.6) return "QADS Alert"
+    if (progress < 0.6) return "QADIS Alert"
     if (progress < 0.8) return "Traditional Alert"
     return "Critical State"
   }
@@ -266,7 +266,7 @@ export function HealthcareBloch() {
       <div className="p-6 border-b border-border">
         <h3 className="text-xl font-bold text-foreground mb-2">Sepsis Progression on Bloch Sphere</h3>
         <p className="text-sm text-muted-foreground">
-          Watch the patient state rotate from healthy (top) to critical (bottom). QADS detects the drift 4-6 hours earlier.
+          Watch the patient state rotate from healthy (top) to critical (bottom). QADIS detects the drift 4-6 hours earlier.
         </p>
       </div>
 

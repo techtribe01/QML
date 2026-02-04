@@ -92,8 +92,8 @@ export function DomainCTA({ domain }: { domain: Domain }) {
             mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
-          Get started with QADS today and experience the power of quantum-enhanced 
-          fraud detection for your organization.
+          Get started with QADIS today and experience the power of quantum-enhanced 
+          anomaly detection for your organization.
         </p>
         
         <div 

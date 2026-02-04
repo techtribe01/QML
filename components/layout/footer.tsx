@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 const footerLinks = {
@@ -34,14 +35,17 @@ export function Footer() {
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" scroll={true} className="flex items-center gap-3 mb-5">
-              <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-lg">
-                <div className="absolute inset-0 bg-gradient-to-br from-finance via-cyber to-healthcare" />
-                <span className="relative text-white font-bold text-sm">Q</span>
-              </div>
-              <span className="font-semibold text-foreground">QADS</span>
+              <Image 
+                src="/logo.jpeg" 
+                alt="QADIS Logo" 
+                width={32} 
+                height={32} 
+                className="rounded-lg"
+              />
+              <span className="font-semibold text-foreground">QADIS</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Enterprise-grade fraud detection powered by Quantum Machine Learning.
+              Quantum Anomaly Detection Intelligence System - Enterprise-grade anomaly detection powered by Quantum Machine Learning.
             </p>
           </div>
 
@@ -102,7 +106,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            2026 QADS. All rights reserved.
+            2026 QADIS. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link href="https://twitter.com" className="text-muted-foreground hover:text-foreground transition-colors">
