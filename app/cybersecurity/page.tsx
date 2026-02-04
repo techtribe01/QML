@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Navigation } from "@/components/layout/navigation"
 import { Footer } from "@/components/layout/footer"
-import { DomainSpecificBloch } from "@/components/visualizer/domain-specific-bloch"
+import { CybersecurityBloch } from "@/components/visualizer/cybersecurity-bloch"
 import { Button } from "@/components/ui/button"
 import { 
   Shield, 
@@ -643,41 +643,8 @@ function BlochSphereVisualization() {
           </p>
         </div>
 
-        <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <DomainSpecificBloch domain="cybersecurity" />
-        </div>
-
-        {/* Interpretation Guide */}
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white border border-border">
-            <div className="flex items-start gap-4">
-              <div className="w-3 h-3 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Normal Orbit (Green)</h3>
-                <p className="text-sm text-muted-foreground">Regular traffic patterns following predictable behavioral orbits around the equator.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-2xl bg-white border border-border">
-            <div className="flex items-start gap-4">
-              <div className="w-3 h-3 rounded-full bg-amber-500 flex-shrink-0 mt-1.5" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Anomalous Pattern (Orange)</h3>
-                <p className="text-sm text-muted-foreground">Unusual but not definitively malicious. May indicate reconnaissance or misconfiguration.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-2xl bg-white border border-border">
-            <div className="flex items-start gap-4">
-              <div className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0 mt-1.5" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Attack Spike (Red)</h3>
-                <p className="text-sm text-muted-foreground">Definitive attack signature. Quantum state diverges sharply from all known legitimate patterns.</p>
-              </div>
-            </div>
-          </div>
+        <div className={`max-w-4xl mx-auto transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <CybersecurityBloch />
         </div>
       </div>
     </section>

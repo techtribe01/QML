@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Navigation } from "@/components/layout/navigation"
 import { Footer } from "@/components/layout/footer"
-import { DomainSpecificBloch } from "@/components/visualizer/domain-specific-bloch"
+import { FinanceBloch } from "@/components/visualizer/finance-bloch"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { 
@@ -607,27 +607,8 @@ function BlochVisualization() {
           </p>
         </div>
 
-        <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <DomainSpecificBloch domain="finance" />
-        </div>
-
-        {/* Kernel Explanation */}
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-finance/5 border border-finance/20">
-            <div className="w-4 h-4 rounded-full bg-finance mb-4" />
-            <h3 className="font-semibold text-foreground mb-2">Legitimate (K = 0.95)</h3>
-            <p className="text-sm text-muted-foreground">High similarity to baseline patterns. Clustered together in quantum space.</p>
-          </div>
-          <div className="p-6 rounded-2xl bg-amber-50 border border-amber-200">
-            <div className="w-4 h-4 rounded-full bg-amber-500 mb-4" />
-            <h3 className="font-semibold text-foreground mb-2">Suspicious (K = 0.45)</h3>
-            <p className="text-sm text-muted-foreground">Medium similarity. Requires additional verification or 2FA.</p>
-          </div>
-          <div className="p-6 rounded-2xl bg-red-50 border border-red-200">
-            <div className="w-4 h-4 rounded-full bg-red-500 mb-4" />
-            <h3 className="font-semibold text-foreground mb-2">Fraudulent (K = 0.12)</h3>
-            <p className="text-sm text-muted-foreground">Low similarity. Far from legitimate patterns. Immediate block.</p>
-          </div>
+        <div className={`max-w-4xl mx-auto transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <FinanceBloch />
         </div>
       </div>
     </section>

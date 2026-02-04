@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Navigation } from "@/components/layout/navigation"
 import { Footer } from "@/components/layout/footer"
-import { DomainSpecificBloch } from "@/components/visualizer/domain-specific-bloch"
+import { HealthcareBloch } from "@/components/visualizer/healthcare-bloch"
 import { Button } from "@/components/ui/button"
 import { 
   Heart, 
@@ -25,6 +25,7 @@ import {
   BellOff
 } from "lucide-react"
 import Link from "next/link"
+
 
 // Patient Timeline Component
 function PatientTimeline() {
@@ -649,41 +650,8 @@ function BlochSphereVisualization() {
           </p>
         </div>
 
-        <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <DomainSpecificBloch domain="healthcare" />
-        </div>
-
-        {/* Interpretation Guide */}
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white border border-border">
-            <div className="flex items-start gap-4">
-              <div className="w-3 h-3 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Healthy Zone (Green)</h3>
-                <p className="text-sm text-muted-foreground">Normal vital signs clustered together. Patient is stable with typical patterns.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-2xl bg-white border border-border">
-            <div className="flex items-start gap-4">
-              <div className="w-3 h-3 rounded-full bg-amber-500 flex-shrink-0 mt-1.5" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Transition Zone (Orange)</h3>
-                <p className="text-sm text-muted-foreground">Early signs detected. Quantum catches pattern before classical systems alert.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-6 rounded-2xl bg-white border border-border">
-            <div className="flex items-start gap-4">
-              <div className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0 mt-1.5" />
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Danger Zone (Red)</h3>
-                <p className="text-sm text-muted-foreground">Critical state. Patient needs immediate intervention. 4-6 hours early warning.</p>
-              </div>
-            </div>
-          </div>
+        <div className={`max-w-4xl mx-auto transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <HealthcareBloch />
         </div>
       </div>
     </section>
@@ -695,17 +663,14 @@ export default function HealthcarePage() {
   return (
     <main className="min-h-screen">
       <Navigation />
-      <PatientTimeline />
-      <QuantumAdvantage />
-      <ArchitectureSection />
-      <BlochSphereVisualization />
-      <MetricsSection />
+      <HealthcareCTA />
       <div id="scenario">
         <PatientTimeline />
       </div>
       <QuantumAdvantage />
+      <BlochSphereVisualization />
       <ArchitectureSection />
-      <HealthcareCTA />
+      <MetricsSection />
       <Footer />
     </main>
   )
