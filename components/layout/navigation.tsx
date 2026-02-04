@@ -109,9 +109,14 @@ export function Navigation() {
               </Link>
             ))}
             <div className="pt-4 mt-2 border-t border-border/50">
-              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium" asChild>
-                <Link href="/demo" scroll={true}>Get Started</Link>
-              </Button>
+              <Link 
+                href="/demo" 
+                scroll={true}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block w-full px-4 py-3 text-sm font-medium rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-center transition-all"
+              >
+                Get Started
+              </Link>
             </div>
           </div>
         </div>
