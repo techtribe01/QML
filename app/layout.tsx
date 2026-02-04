@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { ScrollToTop } from '@/components/layout/scroll-to-top'
 import './globals.css'
 
 const _inter = Inter({ 
@@ -62,6 +63,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="font-sans antialiased bg-background text-foreground min-h-screen">
+        <ScrollToTop />
         {children}
         <Analytics />
       </body>
