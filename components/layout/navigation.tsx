@@ -66,16 +66,8 @@ export function Navigation() {
           ))}
         </div>
 
-        {/* CTA Buttons */}
-        <div className="hidden md:flex items-center gap-3">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-muted-foreground hover:text-foreground"
-            asChild
-          >
-            <Link href="/dashboard" scroll={true}>Dashboard</Link>
-          </Button>
+        {/* CTA Button */}
+        <div className="hidden md:flex items-center">
           <Button 
             size="sm" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-full px-5"
@@ -116,10 +108,7 @@ export function Navigation() {
                 {item.name}
               </Link>
             ))}
-            <div className="pt-4 mt-2 border-t border-border/50 space-y-2">
-              <Button variant="outline" className="w-full bg-transparent border-border" asChild>
-                <Link href="/dashboard" scroll={true}>Dashboard</Link>
-              </Button>
+            <div className="pt-4 mt-2 border-t border-border/50">
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium" asChild>
                 <Link href="/demo" scroll={true}>Get Started</Link>
               </Button>

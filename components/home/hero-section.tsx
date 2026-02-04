@@ -197,33 +197,6 @@ export function HeroSection() {
             </Button>
           </div>
           
-          {/* Stats */}
-          <div className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-12 max-w-3xl mx-auto">
-            <StatItem value="10-15%" label="Precision Gain" delay={800} />
-            <StatItem value="20%" label="Fewer False Positives" delay={1000} />
-            <StatItem value="<2s" label="Scoring Latency" delay={1200} />
-          </div>
-          
-          {/* Trusted By Section */}
-          <div 
-            className={`mt-24 pt-12 border-t border-border/50 transition-all duration-1000 delay-700 ${
-              mounted ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <p className="text-sm text-muted-foreground mb-8 tracking-widest uppercase">
-              Trusted by Industry Leaders
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-              {['QuantumBank', 'MedSecure', 'CyberShield', 'DataGuard'].map((company) => (
-                <span 
-                  key={company} 
-                  className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-default"
-                >
-                  {company}
-                </span>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
       

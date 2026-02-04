@@ -224,23 +224,6 @@ export function DomainsSection() {
             <DomainCard key={domain.id} domain={domain} index={index} />
           ))}
         </div>
-        
-        {/* Bottom Stats Bar */}
-        <div className="mt-16 lg:mt-20 p-6 lg:p-8 rounded-2xl bg-white border border-border/60 shadow-sm">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
-            {[
-              { value: "10K+", label: "Events/Second" },
-              { value: "<2s", label: "Scoring Latency" },
-              { value: "99.9%", label: "Uptime SLA" },
-              { value: "3", label: "Industry Domains" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-foreground mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )
