@@ -1,10 +1,22 @@
 "use client"
 
 // Visualizer Canvas v2 - Updated with proper 3D Bloch spheres
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, Suspense } from "react"
+import dynamic from "next/dynamic"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Sphere, Line, Text, Html } from "@react-three/drei"
+import { OrbitControls, Sphere, Line, Html } from "@react-three/drei"
 import type * as THREE from "three"
+
+function LoadingFallback() {
+  return (
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-muted-foreground text-sm">Loading 3D visualization...</p>
+      </div>
+    </div>
+  )
+}
 
 interface QubitState {
   id: number
@@ -110,19 +122,19 @@ function BlochSphere({
           opacity={0.6}
         />
         
-        {/* Axis labels */}
-        <Text position={[0, 1.5, 0]} fontSize={0.15} color="#1640FF" font="/fonts/Geist-Bold.ttf">
-          |0⟩
-        </Text>
-        <Text position={[0, -1.5, 0]} fontSize={0.15} color="#1640FF" font="/fonts/Geist-Bold.ttf">
-          |1⟩
-        </Text>
-        <Text position={[1.5, 0, 0]} fontSize={0.12} color="#00C9A7" font="/fonts/Geist-Regular.ttf">
-          |+⟩
-        </Text>
-        <Text position={[-1.5, 0, 0]} fontSize={0.12} color="#00C9A7" font="/fonts/Geist-Regular.ttf">
-          |-⟩
-        </Text>
+        {/* Axis endpoint markers */}
+        <Sphere args={[0.08, 8, 8]} position={[0, 1.3, 0]}>
+          <meshBasicMaterial color="#1640FF" />
+        </Sphere>
+        <Sphere args={[0.08, 8, 8]} position={[0, -1.3, 0]}>
+          <meshBasicMaterial color="#1640FF" />
+        </Sphere>
+        <Sphere args={[0.06, 8, 8]} position={[1.3, 0, 0]}>
+          <meshBasicMaterial color="#00C9A7" />
+        </Sphere>
+        <Sphere args={[0.06, 8, 8]} position={[-1.3, 0, 0]}>
+          <meshBasicMaterial color="#00C9A7" />
+        </Sphere>
         
         {/* State vector group */}
         <group ref={stateGroupRef}>
@@ -314,21 +326,24 @@ export function VisualizerCanvas({
       
       <div className="aspect-video bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative">
         {isMounted ? (
-          <Canvas
-            camera={{ position: [0, 3, 10], fov: 50 }}
-            gl={{ antialias: true, alpha: true }}
-          >
-            <color attach="background" args={["#f8fafc"]} />
-            <Scene 
-              qubits={qubits} 
-              selectedQubit={selectedQubit}
-              onSelectQubit={onSelectQubit}
-            />
-          </Canvas>
+          <Suspense fallback={<LoadingFallback />}>
+            <Canvas
+              camera={{ position: [0, 3, 10], fov: 50 }}
+              gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+              dpr={[1, 2]}
+              onCreated={({ gl }) => {
+                gl.setClearColor('#f8fafc')
+              }}
+            >
+              <Scene 
+                qubits={qubits} 
+                selectedQubit={selectedQubit}
+                onSelectQubit={onSelectQubit}
+              />
+            </Canvas>
+          </Suspense>
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="text-muted-foreground">Loading 3D visualization...</div>
-          </div>
+          <LoadingFallback />
         )}
         
         <div className="absolute bottom-4 left-4 px-3 py-2 rounded-lg bg-white/80 backdrop-blur-sm border border-border/50 text-xs text-muted-foreground">

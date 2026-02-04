@@ -1,12 +1,23 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Atom, Sparkles, Zap, GitBranch } from "lucide-react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Sphere, Line } from "@react-three/drei"
 import type * as THREE from "three"
+
+function CanvasLoader() {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-10 h-10 border-3 border-cyber/30 border-t-cyber rounded-full animate-spin mx-auto mb-3" />
+        <p className="text-muted-foreground text-xs">Loading...</p>
+      </div>
+    </div>
+  )
+}
 
 // Simple rotating Bloch sphere - v2
 function BlochSphere({ 
@@ -227,20 +238,21 @@ export function VisualizerPreview() {
           >
             <div className="aspect-square rounded-3xl bg-gradient-to-br from-slate-50 via-white to-cyber/5 border border-border shadow-2xl shadow-cyber/10 overflow-hidden relative">
               {/* 3D Canvas */}
-              {isMounted && (
-                <Canvas
-                  camera={{ position: [0, 2, 6], fov: 45 }}
-                  gl={{ antialias: true, alpha: true }}
-                >
-                  <color attach="background" args={["#fafbfc"]} />
-                  <PreviewScene />
-                </Canvas>
-              )}
-              
-              {!isMounted && (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-muted-foreground text-sm">Loading visualization...</div>
-                </div>
+              {isMounted ? (
+                <Suspense fallback={<CanvasLoader />}>
+                  <Canvas
+                    camera={{ position: [0, 2, 6], fov: 45 }}
+                    gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+                    dpr={[1, 2]}
+                    onCreated={({ gl }) => {
+                      gl.setClearColor('#fafbfc')
+                    }}
+                  >
+                    <PreviewScene />
+                  </Canvas>
+                </Suspense>
+              ) : (
+                <CanvasLoader />
               )}
               
               {/* Overlay label */}
