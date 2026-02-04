@@ -4,7 +4,6 @@ import { HeroSection } from "@/components/home/hero-section"
 import { DomainsSection } from "@/components/home/domains-section"
 import { HowItWorksSection } from "@/components/home/how-it-works-section"
 import { VisualizerPreview } from "@/components/home/visualizer-preview"
-import { CTASection } from "@/components/home/cta-section"
 
 export default function HomePage() {
   return (
@@ -22,9 +21,6 @@ export default function HomePage() {
       
       {/* Qubit Visualizer Preview */}
       <VisualizerPreview />
-      
-      {/* Final CTA */}
-      <CTASection />
       
       <Footer />
     </main>
