@@ -296,27 +296,6 @@ export function HowItWorksSection() {
             />
           ))}
         </div>
-
-        {/* Bottom Stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { label: "Avg. Processing Time", value: "1.2s", icon: Zap },
-            { label: "Accuracy Rate", value: "99.2%", icon: Check },
-            { label: "Daily Events", value: "50M+", icon: Database },
-            { label: "False Positive Reduction", value: "20%", icon: BarChart3 },
-          ].map((stat) => (
-            <div 
-              key={stat.label}
-              className="bg-white rounded-xl p-4 border border-border text-center"
-            >
-              <div className="flex justify-center mb-2">
-                <stat.icon className="w-5 h-5 text-primary" />
-              </div>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   )
