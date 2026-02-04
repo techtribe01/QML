@@ -1,127 +1,92 @@
 "use client"
 
-import { useRef, useState, useEffect, Suspense, useMemo } from "react"
+import { useRef, useState, useEffect, Suspense } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Sphere, Html } from "@react-three/drei"
 import * as THREE from "three"
 import { Button } from "@/components/ui/button"
-import { CreditCard, ShieldAlert, ShieldCheck } from "lucide-react"
+import { Play, Pause, CreditCard, ShieldAlert, DollarSign } from "lucide-react"
 
 interface Transaction {
   id: number
   position: [number, number, number]
   type: "legitimate" | "suspicious" | "fraud"
   kernelValue: number
-  label: string
+  amount: number
+  merchant: string
+  time: string
+  velocity: number
 }
 
-// Generate clustered legitimate transactions
-function generateLegitimateCluster(): Transaction[] {
-  const transactions: Transaction[] = []
-  for (let i = 0; i < 12; i++) {
-    const theta = (Math.random() * 0.4 + 0.1) * Math.PI // Top portion
-    const phi = Math.random() * Math.PI * 2
-    const r = 0.75 + Math.random() * 0.15
-    transactions.push({
-      id: i,
-      position: [
-        r * Math.sin(theta) * Math.cos(phi),
-        r * Math.cos(theta),
-        r * Math.sin(theta) * Math.sin(phi)
-      ],
-      type: "legitimate",
-      kernelValue: 0.85 + Math.random() * 0.12,
-      label: `TXN-${1000 + i}`
-    })
-  }
-  return transactions
-}
-
-// Single transaction point
-function TransactionPoint({ 
-  transaction, 
-  isHighlighted,
-  onClick 
-}: { 
-  transaction: Transaction
-  isHighlighted: boolean
-  onClick: () => void
-}) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const glowRef = useRef<THREE.Mesh>(null)
-  
-  const color = transaction.type === "legitimate" ? "#1640FF" : 
-                transaction.type === "suspicious" ? "#FFA500" : "#EF4444"
+// Sarah's behavioral fingerprint - her normal spending pattern forms a tight cluster
+function BehavioralFingerprint({ opacity }: { opacity: number }) {
+  const ringRef = useRef<THREE.Mesh>(null)
   
   useFrame((state) => {
-    if (glowRef.current && isHighlighted) {
-      const scale = 1 + Math.sin(state.clock.elapsedTime * 4) * 0.3
-      glowRef.current.scale.setScalar(scale)
+    if (ringRef.current) {
+      ringRef.current.rotation.z = state.clock.elapsedTime * 0.2
     }
   })
 
-  const size = transaction.type === "fraud" ? 0.08 : 0.05
-
   return (
-    <group position={transaction.position} onClick={onClick}>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[size, 12, 12]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={isHighlighted ? 0.8 : 0.3} />
+    <group position={[0.3, 0.5, 0.2]}>
+      {/* Fingerprint core - Sarah's baseline */}
+      <mesh>
+        <sphereGeometry args={[0.15, 24, 24]} />
+        <meshBasicMaterial color="#1640FF" transparent opacity={opacity * 0.15} />
       </mesh>
-      {isHighlighted && (
-        <>
-          <mesh ref={glowRef}>
-            <sphereGeometry args={[size * 2, 12, 12]} />
-            <meshBasicMaterial color={color} transparent opacity={0.2} />
-          </mesh>
-          <Html distanceFactor={8} position={[0.15, 0.1, 0]}>
-            <div className="bg-white/95 backdrop-blur px-3 py-2 rounded-lg text-xs shadow-lg border min-w-[120px]">
-              <div className="font-semibold text-foreground">{transaction.label}</div>
-              <div className="text-muted-foreground mt-1">
-                K = {transaction.kernelValue.toFixed(2)}
-              </div>
-              <div className={`mt-1 font-medium ${
-                transaction.type === "legitimate" ? "text-primary" :
-                transaction.type === "suspicious" ? "text-amber-600" : "text-destructive"
-              }`}>
-                {transaction.type === "legitimate" ? "Approved" :
-                 transaction.type === "suspicious" ? "Review" : "Blocked"}
-              </div>
-            </div>
-          </Html>
-        </>
-      )}
+      
+      {/* Pulsing ring showing normal variance */}
+      <mesh ref={ringRef}>
+        <torusGeometry args={[0.2, 0.01, 8, 32]} />
+        <meshBasicMaterial color="#1640FF" transparent opacity={opacity * 0.3} />
+      </mesh>
+      
+      <Html position={[0.25, 0.15, 0]} distanceFactor={10}>
+        <div className="text-[10px] text-primary font-medium bg-white/80 px-2 py-0.5 rounded whitespace-nowrap">
+          Sarah's Fingerprint
+        </div>
+      </Html>
     </group>
   )
 }
 
-// Fraud transaction that animates in
-function FraudTransaction({ 
-  visible, 
-  isHighlighted,
-  onClick 
+// Real-time transaction that flows in and gets measured
+function LiveTransaction({ 
+  transaction,
+  isActive,
+  showMeasurement,
+  fingerprintCenter
 }: { 
-  visible: boolean
-  isHighlighted: boolean
-  onClick: () => void
+  transaction: Transaction | null
+  isActive: boolean
+  showMeasurement: boolean
+  fingerprintCenter: [number, number, number]
 }) {
-  const groupRef = useRef<THREE.Group>(null)
+  const meshRef = useRef<THREE.Mesh>(null)
   const [animProgress, setAnimProgress] = useState(0)
   
   useEffect(() => {
-    if (visible) {
+    if (isActive && transaction) {
+      setAnimProgress(0)
       const interval = setInterval(() => {
-        setAnimProgress(prev => Math.min(prev + 0.02, 1))
+        setAnimProgress(prev => Math.min(prev + 0.03, 1))
       }, 20)
       return () => clearInterval(interval)
-    } else {
-      setAnimProgress(0)
     }
-  }, [visible])
-  
-  // Fraud position - far from cluster (outlier)
-  const targetPos: [number, number, number] = [-0.6, -0.7, 0.5]
-  const startPos: [number, number, number] = [0.2, 0.6, 0.1]
+  }, [isActive, transaction]) // Updated dependency array
+
+  useFrame((state) => {
+    if (meshRef.current && isActive) {
+      const pulse = 1 + Math.sin(state.clock.elapsedTime * 5) * 0.2
+      meshRef.current.scale.setScalar(pulse)
+    }
+  })
+
+  if (!transaction || !isActive) return null
+
+  const startPos: [number, number, number] = [0, 1.3, 0]
+  const targetPos = transaction.position
   
   const currentPos: [number, number, number] = [
     startPos[0] + (targetPos[0] - startPos[0]) * animProgress,
@@ -129,72 +94,167 @@ function FraudTransaction({
     startPos[2] + (targetPos[2] - startPos[2]) * animProgress,
   ]
   
+  const color = transaction.type === "legitimate" ? "#1640FF" : 
+                transaction.type === "suspicious" ? "#FFA500" : "#EF4444"
+
+  // Kernel measurement line
+  const measurementPoints = showMeasurement && animProgress > 0.8 ? [
+    new THREE.Vector3(...currentPos),
+    new THREE.Vector3(...fingerprintCenter)
+  ] : null
+
+  return (
+    <>
+      {/* Transaction point */}
+      <group position={currentPos}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[0.06, 16, 16]} />
+          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshBasicMaterial color={color} transparent opacity={0.2} />
+        </mesh>
+        
+        {animProgress > 0.9 && (
+          <Html distanceFactor={8} position={[0.15, 0.1, 0]}>
+            <div className={`bg-white/95 backdrop-blur px-3 py-2 rounded-lg text-xs shadow-lg border min-w-[130px] ${
+              transaction.type === "fraud" ? "border-destructive/50" : "border-border"
+            }`}>
+              <div className="font-semibold text-foreground">${transaction.amount}</div>
+              <div className="text-muted-foreground">{transaction.merchant}</div>
+              <div className="text-muted-foreground">{transaction.time}</div>
+              <div className="mt-1 pt-1 border-t border-border">
+                <span className="text-muted-foreground">K = </span>
+                <span className={`font-bold ${
+                  transaction.type === "legitimate" ? "text-primary" :
+                  transaction.type === "suspicious" ? "text-amber-600" : "text-destructive"
+                }`}>{transaction.kernelValue.toFixed(2)}</span>
+              </div>
+            </div>
+          </Html>
+        )}
+      </group>
+
+      {/* Kernel measurement line */}
+      {measurementPoints && (
+        <line geometry={new THREE.BufferGeometry().setFromPoints(measurementPoints)}>
+          <lineBasicMaterial color={color} transparent opacity={0.4} linewidth={2} />
+        </line>
+      )}
+    </>
+  )
+}
+
+// Historical transactions that stay on the sphere
+function HistoricalTransactions({ transactions }: { transactions: Transaction[] }) {
+  return (
+    <>
+      {transactions.map((tx) => {
+        const color = tx.type === "legitimate" ? "#1640FF" : 
+                      tx.type === "suspicious" ? "#FFA500" : "#EF4444"
+        return (
+          <mesh key={tx.id} position={tx.position}>
+            <sphereGeometry args={[0.03, 8, 8]} />
+            <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} transparent opacity={0.7} />
+          </mesh>
+        )
+      })}
+    </>
+  )
+}
+
+// 8-way entanglement visualization
+function EntanglementOctagon() {
+  const groupRef = useRef<THREE.Group>(null)
+  
+  const features = [
+    { angle: 0, label: "Amt" },
+    { angle: 45, label: "Loc" },
+    { angle: 90, label: "Time" },
+    { angle: 135, label: "Dev" },
+    { angle: 180, label: "Merch" },
+    { angle: 225, label: "Vel" },
+    { angle: 270, label: "Hist" },
+    { angle: 315, label: "Peer" },
+  ]
+
   useFrame((state) => {
-    if (groupRef.current && visible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 2
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.3
     }
   })
 
-  if (!visible) return null
+  const radius = 0.4
+  const y = -1.35
 
   return (
-    <group ref={groupRef} position={currentPos} onClick={onClick}>
-      <mesh>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshStandardMaterial color="#EF4444" emissive="#EF4444" emissiveIntensity={0.8} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color="#EF4444" transparent opacity={0.3} />
-      </mesh>
-      {isHighlighted && (
-        <Html distanceFactor={8} position={[0.2, 0.15, 0]}>
-          <div className="bg-white/95 backdrop-blur px-3 py-2 rounded-lg text-xs shadow-lg border border-destructive/30 min-w-[140px]">
-            <div className="font-semibold text-destructive">FRAUD DETECTED</div>
-            <div className="text-muted-foreground mt-1">K = 0.08</div>
-            <div className="text-destructive font-medium mt-1">Blocked in 47ms</div>
-          </div>
-        </Html>
-      )}
+    <group ref={groupRef}>
+      {/* Feature nodes */}
+      {features.map((f, i) => {
+        const rad = (f.angle * Math.PI) / 180
+        const x = radius * Math.cos(rad)
+        const z = radius * Math.sin(rad)
+        return (
+          <group key={i} position={[x, y, z]}>
+            <mesh>
+              <sphereGeometry args={[0.025, 8, 8]} />
+              <meshStandardMaterial color="#7B61FF" emissive="#7B61FF" emissiveIntensity={0.5} />
+            </mesh>
+          </group>
+        )
+      })}
+      
+      {/* Connecting lines (octagon) */}
+      {features.map((f, i) => {
+        const nextI = (i + 1) % features.length
+        const rad1 = (f.angle * Math.PI) / 180
+        const rad2 = (features[nextI].angle * Math.PI) / 180
+        const points = [
+          new THREE.Vector3(radius * Math.cos(rad1), y, radius * Math.sin(rad1)),
+          new THREE.Vector3(radius * Math.cos(rad2), y, radius * Math.sin(rad2)),
+        ]
+        return (
+          <line key={i} geometry={new THREE.BufferGeometry().setFromPoints(points)}>
+            <lineBasicMaterial color="#7B61FF" transparent opacity={0.4} />
+          </line>
+        )
+      })}
+      
+      {/* Cross connections */}
+      {[0, 1, 2, 3].map((i) => {
+        const rad1 = (features[i].angle * Math.PI) / 180
+        const rad2 = (features[i + 4].angle * Math.PI) / 180
+        const points = [
+          new THREE.Vector3(radius * Math.cos(rad1), y, radius * Math.sin(rad1)),
+          new THREE.Vector3(radius * Math.cos(rad2), y, radius * Math.sin(rad2)),
+        ]
+        return (
+          <line key={`cross-${i}`} geometry={new THREE.BufferGeometry().setFromPoints(points)}>
+            <lineBasicMaterial color="#7B61FF" transparent opacity={0.2} />
+          </line>
+        )
+      })}
+
+      <Html position={[0, y - 0.15, 0]} distanceFactor={10}>
+        <div className="text-[10px] text-cyber font-semibold whitespace-nowrap">8-Way Entanglement</div>
+      </Html>
     </group>
   )
 }
 
-// Kernel distance line
-function KernelDistanceLine({ from, to, visible }: { from: [number, number, number]; to: [number, number, number]; visible: boolean }) {
-  if (!visible) return null
-  
-  const points = [new THREE.Vector3(...from), new THREE.Vector3(...to)]
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
-  
-  return (
-    <line geometry={lineGeometry}>
-      <lineBasicMaterial color="#EF4444" transparent opacity={0.5} linewidth={2} />
-    </line>
-  )
-}
-
 function FinanceScene({ 
-  transactions, 
-  showFraud, 
-  selectedId, 
-  onSelect 
+  historicalTxns,
+  currentTxn,
+  isStreaming,
+  showMeasurement
 }: { 
-  transactions: Transaction[]
-  showFraud: boolean
-  selectedId: number | null
-  onSelect: (id: number | null) => void
+  historicalTxns: Transaction[]
+  currentTxn: Transaction | null
+  isStreaming: boolean
+  showMeasurement: boolean
 }) {
-  // Calculate cluster center
-  const clusterCenter = useMemo(() => {
-    const sum = transactions.reduce((acc, t) => ({
-      x: acc.x + t.position[0],
-      y: acc.y + t.position[1],
-      z: acc.z + t.position[2]
-    }), { x: 0, y: 0, z: 0 })
-    const n = transactions.length
-    return [sum.x / n, sum.y / n, sum.z / n] as [number, number, number]
-  }, [transactions])
+  const fingerprintCenter: [number, number, number] = [0.3, 0.5, 0.2]
 
   return (
     <>
@@ -206,18 +266,7 @@ function FinanceScene({
         <meshBasicMaterial wireframe transparent opacity={0.08} color="#000000" />
       </Sphere>
       
-      {/* Axes */}
-      <line>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={2}
-            array={new Float32Array([-1.2, 0, 0, 1.2, 0, 0])}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial color="#CCCCCC" transparent opacity={0.3} />
-      </line>
+      {/* Axes with labels */}
       <line>
         <bufferGeometry>
           <bufferAttribute
@@ -229,70 +278,150 @@ function FinanceScene({
         </bufferGeometry>
         <lineBasicMaterial color="#CCCCCC" transparent opacity={0.3} />
       </line>
-      <line>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={2}
-            array={new Float32Array([0, 0, -1.2, 0, 0, 1.2])}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <lineBasicMaterial color="#CCCCCC" transparent opacity={0.3} />
-      </line>
+      
+      {/* Pole labels */}
+      <Html position={[0.15, 1.15, 0]} distanceFactor={10}>
+        <div className="text-[10px] text-primary font-semibold bg-white/80 px-1.5 py-0.5 rounded">Legitimate</div>
+      </Html>
+      <Html position={[0.15, -1.15, 0]} distanceFactor={10}>
+        <div className="text-[10px] text-destructive font-semibold bg-white/80 px-1.5 py-0.5 rounded">Fraudulent</div>
+      </Html>
 
-      {/* Legitimate cluster boundary indicator */}
-      <mesh position={clusterCenter}>
-        <sphereGeometry args={[0.4, 24, 24]} />
-        <meshBasicMaterial color="#1640FF" transparent opacity={0.05} />
-      </mesh>
+      {/* Sarah's behavioral fingerprint */}
+      <BehavioralFingerprint opacity={1} />
       
-      {/* Transactions */}
-      {transactions.map((tx) => (
-        <TransactionPoint 
-          key={tx.id} 
-          transaction={tx} 
-          isHighlighted={selectedId === tx.id}
-          onClick={() => onSelect(selectedId === tx.id ? null : tx.id)}
-        />
-      ))}
+      {/* Historical transactions */}
+      <HistoricalTransactions transactions={historicalTxns} />
       
-      {/* Fraud transaction */}
-      <FraudTransaction 
-        visible={showFraud} 
-        isHighlighted={selectedId === -1}
-        onClick={() => onSelect(selectedId === -1 ? null : -1)}
+      {/* Current live transaction */}
+      <LiveTransaction 
+        transaction={currentTxn}
+        isActive={isStreaming}
+        showMeasurement={showMeasurement}
+        fingerprintCenter={fingerprintCenter}
       />
       
-      {/* Distance line from fraud to cluster */}
-      <KernelDistanceLine 
-        from={[-0.6, -0.7, 0.5]} 
-        to={clusterCenter} 
-        visible={showFraud && selectedId === -1}
-      />
+      {/* 8-way entanglement */}
+      <EntanglementOctagon />
       
-      <OrbitControls enableZoom={true} autoRotate autoRotateSpeed={0.5} />
+      <OrbitControls enableZoom={true} autoRotate={!isStreaming} autoRotateSpeed={0.5} />
     </>
   )
 }
 
+// Transaction data generator
+function generateTransaction(index: number, isFraud: boolean): Transaction {
+  if (isFraud) {
+    // Fraud transactions - far from fingerprint cluster
+    const fraudPatterns = [
+      { merchant: "Electronics Store", amount: 847, time: "3:42 AM", pos: [-0.6, -0.7, 0.4] as [number, number, number] },
+      { merchant: "Gift Cards", amount: 500, time: "3:58 AM", pos: [-0.5, -0.8, -0.3] as [number, number, number] },
+      { merchant: "Wire Transfer", amount: 2500, time: "4:15 AM", pos: [-0.7, -0.6, -0.2] as [number, number, number] },
+    ]
+    const pattern = fraudPatterns[index % fraudPatterns.length]
+    return {
+      id: index,
+      position: pattern.pos,
+      type: "fraud",
+      kernelValue: 0.05 + Math.random() * 0.1,
+      amount: pattern.amount,
+      merchant: pattern.merchant,
+      time: pattern.time,
+      velocity: 12 + Math.random() * 5
+    }
+  } else {
+    // Legitimate transactions - cluster near fingerprint
+    const legitPatterns = [
+      { merchant: "Coffee Shop", amount: 5.50, time: "8:15 AM" },
+      { merchant: "Grocery Store", amount: 67.32, time: "6:30 PM" },
+      { merchant: "Gas Station", amount: 45.00, time: "7:45 AM" },
+      { merchant: "Restaurant", amount: 34.50, time: "12:30 PM" },
+      { merchant: "Online Shopping", amount: 29.99, time: "9:00 PM" },
+    ]
+    const pattern = legitPatterns[index % legitPatterns.length]
+    const basePos: [number, number, number] = [0.3, 0.5, 0.2]
+    const offset = 0.15
+    return {
+      id: index,
+      position: [
+        basePos[0] + (Math.random() - 0.5) * offset,
+        basePos[1] + (Math.random() - 0.5) * offset,
+        basePos[2] + (Math.random() - 0.5) * offset
+      ] as [number, number, number],
+      type: "legitimate",
+      kernelValue: 0.88 + Math.random() * 0.1,
+      amount: pattern.amount + (Math.random() - 0.5) * 10,
+      merchant: pattern.merchant,
+      time: pattern.time,
+      velocity: 1 + Math.random() * 2
+    }
+  }
+}
+
 export function FinanceBloch() {
   const [isMounted, setIsMounted] = useState(false)
-  const [showFraud, setShowFraud] = useState(false)
-  const [selectedId, setSelectedId] = useState<number | null>(null)
-  const [transactions] = useState<Transaction[]>(() => generateLegitimateCluster())
+  const [isStreaming, setIsStreaming] = useState(false)
+  const [simulateFraud, setSimulateFraud] = useState(false)
+  const [historicalTxns, setHistoricalTxns] = useState<Transaction[]>([])
+  const [currentTxn, setCurrentTxn] = useState<Transaction | null>(null)
+  const [txnIndex, setTxnIndex] = useState(0)
+  const [stats, setStats] = useState({ total: 0, legitimate: 0, fraud: 0, blocked: 0 })
+  const streamRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     setIsMounted(true)
+    // Initialize with some historical legitimate transactions
+    const initial = Array.from({ length: 8 }, (_, i) => generateTransaction(i, false))
+    setHistoricalTxns(initial)
+    setStats({ total: 8, legitimate: 8, fraud: 0, blocked: 0 })
+    return () => {
+      if (streamRef.current) clearInterval(streamRef.current)
+    }
   }, [])
+
+  useEffect(() => {
+    if (isStreaming) {
+      streamRef.current = setInterval(() => {
+        const isFraudTxn = simulateFraud && Math.random() < 0.4
+        const newTxn = generateTransaction(txnIndex, isFraudTxn)
+        setCurrentTxn(newTxn)
+        setTxnIndex(prev => prev + 1)
+        
+        // After animation, add to history
+        setTimeout(() => {
+          setHistoricalTxns(prev => [...prev.slice(-15), newTxn])
+          setStats(prev => ({
+            total: prev.total + 1,
+            legitimate: prev.legitimate + (isFraudTxn ? 0 : 1),
+            fraud: prev.fraud + (isFraudTxn ? 1 : 0),
+            blocked: prev.blocked + (isFraudTxn ? 1 : 0)
+          }))
+        }, 1500)
+      }, 2500)
+    } else {
+      if (streamRef.current) clearInterval(streamRef.current)
+    }
+    
+    return () => {
+      if (streamRef.current) clearInterval(streamRef.current)
+    }
+  }, [isStreaming, simulateFraud, txnIndex])
+
+  const handleToggleStream = () => {
+    setIsStreaming(!isStreaming)
+  }
+
+  const handleToggleFraud = () => {
+    setSimulateFraud(!simulateFraud)
+  }
 
   return (
     <div className="w-full bg-white rounded-2xl border border-border overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-border">
-        <h3 className="text-xl font-bold text-foreground mb-2">Transaction Feature Space</h3>
+        <h3 className="text-xl font-bold text-foreground mb-2">Real-Time Transaction Scoring</h3>
         <p className="text-sm text-muted-foreground">
-          Legitimate transactions cluster tightly (K {'>'} 0.85). Fraud appears as outliers far from the cluster (K {'<'} 0.3).
+          Watch transactions flow in and get scored against Sarah's behavioral fingerprint. Quantum kernel measures distance in 8-dimensional entangled space.
         </p>
       </div>
 
@@ -310,10 +439,10 @@ export function FinanceBloch() {
               dpr={[1, 2]}
             >
               <FinanceScene 
-                transactions={transactions} 
-                showFraud={showFraud}
-                selectedId={selectedId}
-                onSelect={setSelectedId}
+                historicalTxns={historicalTxns}
+                currentTxn={currentTxn}
+                isStreaming={isStreaming}
+                showMeasurement={true}
               />
             </Canvas>
           </Suspense>
@@ -323,64 +452,89 @@ export function FinanceBloch() {
           </div>
         )}
 
-        {/* Kernel Value Legend */}
+        {/* Live stats */}
         <div className="absolute top-4 left-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg border">
-          <div className="text-xs font-semibold text-foreground mb-2">Quantum Kernel (K)</div>
-          <div className="space-y-1 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-primary" />
-              <span>K {'>'} 0.85 = Legitimate</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-amber-500" />
-              <span>0.3-0.85 = Suspicious</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-destructive" />
-              <span>K {'<'} 0.3 = Fraud</span>
-            </div>
+          <div className="flex items-center gap-2 mb-2">
+            <div className={`w-2 h-2 rounded-full ${isStreaming ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <span className="text-xs font-semibold">{isStreaming ? "LIVE" : "PAUSED"}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+            <span className="text-muted-foreground">Total:</span>
+            <span className="font-mono text-right">{stats.total}</span>
+            <span className="text-muted-foreground">Approved:</span>
+            <span className="font-mono text-right text-primary">{stats.legitimate}</span>
+            <span className="text-muted-foreground">Blocked:</span>
+            <span className="font-mono text-right text-destructive">{stats.blocked}</span>
           </div>
         </div>
 
-        {/* Transaction count */}
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg border text-center">
-          <div className="text-2xl font-bold text-foreground">{transactions.length}</div>
-          <div className="text-xs text-muted-foreground">Legitimate TXNs</div>
-          {showFraud && (
-            <div className="mt-2 pt-2 border-t border-border">
-              <div className="text-lg font-bold text-destructive">1</div>
-              <div className="text-xs text-destructive">Fraud Blocked</div>
+        {/* Current transaction */}
+        {currentTxn && isStreaming && (
+          <div className={`absolute top-4 right-4 backdrop-blur rounded-lg p-3 shadow-lg border ${
+            currentTxn.type === "fraud" ? "bg-destructive/10 border-destructive/30" : "bg-white/90"
+          }`}>
+            <div className="text-xs font-semibold mb-1">
+              {currentTxn.type === "fraud" ? "FRAUD DETECTED" : "Processing..."}
             </div>
-          )}
+            <div className="text-lg font-bold">${currentTxn.amount.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">{currentTxn.merchant}</div>
+            {currentTxn.type === "fraud" && (
+              <div className="text-xs text-destructive font-semibold mt-1">Blocked in 47ms</div>
+            )}
+          </div>
+        )}
+
+        {/* Kernel scale */}
+        <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur rounded-lg p-2 shadow-lg border">
+          <div className="text-[10px] text-muted-foreground mb-1">Kernel Distance</div>
+          <div className="flex items-center gap-1">
+            <div className="w-16 h-2 rounded-full bg-gradient-to-r from-primary via-amber-500 to-destructive" />
+          </div>
+          <div className="flex justify-between text-[9px] text-muted-foreground mt-0.5">
+            <span>K=1.0</span>
+            <span>K=0.0</span>
+          </div>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="p-4 border-t border-border bg-secondary/30 flex items-center justify-between">
+      <div className="p-4 border-t border-border bg-secondary/30 flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <Button 
             size="sm" 
-            variant={showFraud ? "destructive" : "default"}
-            onClick={() => {
-              setShowFraud(!showFraud)
-              if (!showFraud) setSelectedId(-1)
-              else setSelectedId(null)
-            }}
+            variant={isStreaming ? "secondary" : "default"}
+            onClick={handleToggleStream}
             className="gap-2"
           >
-            {showFraud ? <ShieldAlert className="w-4 h-4" /> : <CreditCard className="w-4 h-4" />}
-            {showFraud ? "Fraud Detected!" : "Simulate Fraud"}
+            {isStreaming ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {isStreaming ? "Pause Stream" : "Start Stream"}
           </Button>
-          {showFraud && (
-            <div className="flex items-center gap-2 text-sm text-destructive font-medium animate-pulse">
-              <ShieldCheck className="w-4 h-4" />
-              Blocked in 47ms
-            </div>
-          )}
+          
+          <Button 
+            size="sm" 
+            variant={simulateFraud ? "destructive" : "outline"}
+            onClick={handleToggleFraud}
+            className="gap-2 bg-transparent"
+            disabled={!isStreaming}
+          >
+            <ShieldAlert className="w-4 h-4" />
+            {simulateFraud ? "Fraud Active" : "Inject Fraud"}
+          </Button>
         </div>
         
-        <div className="text-xs text-muted-foreground">
-          Click any point to inspect
+        <div className="flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-primary" />
+            <span>Legitimate</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-destructive" />
+            <span>Fraud</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-cyber" />
+            <span>Entangled</span>
+          </div>
         </div>
       </div>
     </div>
