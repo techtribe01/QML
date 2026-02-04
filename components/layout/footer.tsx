@@ -1,40 +1,22 @@
 import Image from "next/image"
 import Link from "next/link"
 
-const footerLinks = {
-  product: [
-    { name: "Finance", href: "/finance" },
-    { name: "Healthcare", href: "/healthcare" },
-    { name: "Cybersecurity", href: "/cybersecurity" },
-    { name: "Visualizer", href: "/visualizer" },
-  ],
-  resources: [
-    { name: "Documentation", href: "/docs" },
-    { name: "API Reference", href: "/api" },
-    { name: "Live Demo", href: "/demo" },
-    { name: "Case Studies", href: "/cases" },
-  ],
-  company: [
-    { name: "About", href: "/about" },
-    { name: "Blog", href: "/blog" },
-    { name: "Careers", href: "/careers" },
-    { name: "Contact", href: "/contact" },
-  ],
-  legal: [
-    { name: "Privacy", href: "/privacy" },
-    { name: "Terms", href: "/terms" },
-    { name: "Security", href: "/security" },
-  ],
-}
+const footerLinks = [
+  { name: "Finance", href: "/finance" },
+  { name: "Healthcare", href: "/healthcare" },
+  { name: "Cybersecurity", href: "/cybersecurity" },
+  { name: "Visualizer", href: "/visualizer" },
+  { name: "Demo", href: "/demo" },
+]
 
 export function Footer() {
   return (
     <footer className="bg-secondary/30 border-t border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
-          {/* Brand Column */}
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" scroll={true} className="flex items-center gap-3 mb-5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+          {/* Brand */}
+          <div className="max-w-sm">
+            <Link href="/" scroll={true} className="flex items-center gap-3 mb-4">
               <Image 
                 src="/logo.jpeg" 
                 alt="QADIS Logo" 
@@ -50,56 +32,17 @@ export function Footer() {
           </div>
 
           {/* Links */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Product</h3>
-            <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} scroll={true} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Resources</h3>
-            <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} scroll={true} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} scroll={true} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-            <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} scroll={true} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="flex flex-wrap gap-6">
+            {footerLinks.map((link) => (
+              <Link 
+                key={link.href} 
+                href={link.href} 
+                scroll={true} 
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
         </div>
 
