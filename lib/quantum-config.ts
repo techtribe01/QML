@@ -1,31 +1,48 @@
 // Quantum Backend Configuration
-// Update this URL each time you restart your Gradio quantum backend
-// The Gradio public URL changes on each run
+// Update these URLs each time you restart your Gradio quantum backends
+// Each domain has its own Gradio instance with a unique URL
 
 export const QUANTUM_BACKEND_CONFIG = {
-  // Replace this URL with your current Gradio public URL
-  // Example: "https://abc123def456.gradio.live"
-  GRADIO_URL: "https://your-gradio-url.gradio.live",
+  // ===========================================
+  // UPDATE THESE URLs WHEN YOU RESTART GRADIO
+  // ===========================================
   
-  // API endpoints (append to GRADIO_URL)
+  // Healthcare Gradio Backend URL
+  HEALTHCARE_GRADIO_URL: "https://your-healthcare-gradio-url.gradio.live",
+  
+  // Finance Gradio Backend URL
+  FINANCE_GRADIO_URL: "https://your-finance-gradio-url.gradio.live",
+  
+  // Cybersecurity Gradio Backend URL
+  CYBERSECURITY_GRADIO_URL: "https://your-cybersecurity-gradio-url.gradio.live",
+  
+  // ===========================================
+  // API ENDPOINTS (append to domain URL)
+  // ===========================================
   ENDPOINTS: {
     // Healthcare endpoints
-    HEALTHCARE_PREDICT: "/api/predict/healthcare",
-    HEALTHCARE_ANALYZE: "/api/analyze/sepsis",
+    HEALTHCARE: {
+      PREDICT: "/api/predict",
+      ANALYZE_SEPSIS: "/api/analyze/sepsis",
+      PATIENT_STATE: "/api/patient/state",
+      VITAL_SIGNS: "/api/vitals",
+    },
     
     // Finance endpoints
-    FINANCE_PREDICT: "/api/predict/finance",
-    FINANCE_FRAUD_CHECK: "/api/analyze/fraud",
-    FINANCE_KERNEL: "/api/kernel/compute",
+    FINANCE: {
+      PREDICT: "/api/predict",
+      FRAUD_CHECK: "/api/fraud/check",
+      KERNEL_COMPUTE: "/api/kernel/compute",
+      TRANSACTION_SCORE: "/api/transaction/score",
+    },
     
     // Cybersecurity endpoints
-    CYBER_PREDICT: "/api/predict/cyber",
-    CYBER_ANOMALY: "/api/analyze/anomaly",
-    
-    // General quantum endpoints
-    QUANTUM_STATE: "/api/quantum/state",
-    BLOCH_SPHERE: "/api/quantum/bloch",
-    ENTANGLEMENT: "/api/quantum/entangle",
+    CYBERSECURITY: {
+      PREDICT: "/api/predict",
+      ANOMALY_DETECT: "/api/anomaly/detect",
+      TRAFFIC_ANALYZE: "/api/traffic/analyze",
+      THREAT_SCORE: "/api/threat/score",
+    },
   },
   
   // Timeout settings (ms)
@@ -36,22 +53,66 @@ export const QUANTUM_BACKEND_CONFIG = {
   RETRY_DELAY: 1000,
 }
 
-// Helper function to get full API URL
-export function getApiUrl(endpoint: keyof typeof QUANTUM_BACKEND_CONFIG.ENDPOINTS): string {
-  return `${QUANTUM_BACKEND_CONFIG.GRADIO_URL}${QUANTUM_BACKEND_CONFIG.ENDPOINTS[endpoint]}`
+// Domain type
+export type Domain = "healthcare" | "finance" | "cybersecurity"
+
+// Get the base URL for a specific domain
+export function getGradioUrl(domain: Domain): string {
+  switch (domain) {
+    case "healthcare":
+      return QUANTUM_BACKEND_CONFIG.HEALTHCARE_GRADIO_URL
+    case "finance":
+      return QUANTUM_BACKEND_CONFIG.FINANCE_GRADIO_URL
+    case "cybersecurity":
+      return QUANTUM_BACKEND_CONFIG.CYBERSECURITY_GRADIO_URL
+  }
 }
 
-// Helper function to check if backend is configured
-export function isBackendConfigured(): boolean {
-  return !QUANTUM_BACKEND_CONFIG.GRADIO_URL.includes("your-gradio-url")
+// Get full API URL for a domain endpoint
+export function getApiUrl(domain: Domain, endpoint: string): string {
+  const baseUrl = getGradioUrl(domain)
+  return `${baseUrl}${endpoint}`
 }
 
-// Helper to update URL (for reference - actual update is manual)
+// Check if a specific domain backend is configured
+export function isBackendConfigured(domain: Domain): boolean {
+  const url = getGradioUrl(domain)
+  return !url.includes("your-") && url.includes("gradio.live")
+}
+
+// Check if all backends are configured
+export function areAllBackendsConfigured(): boolean {
+  return (
+    isBackendConfigured("healthcare") &&
+    isBackendConfigured("finance") &&
+    isBackendConfigured("cybersecurity")
+  )
+}
+
+// Helper to get all URLs (for status display)
+export function getAllUrls() {
+  return {
+    healthcare: QUANTUM_BACKEND_CONFIG.HEALTHCARE_GRADIO_URL,
+    finance: QUANTUM_BACKEND_CONFIG.FINANCE_GRADIO_URL,
+    cybersecurity: QUANTUM_BACKEND_CONFIG.CYBERSECURITY_GRADIO_URL,
+  }
+}
+
+// Update instructions
 export const UPDATE_INSTRUCTIONS = `
-To update the Gradio URL:
-1. Start your quantum backend (python app.py or gradio app.py)
-2. Copy the public URL from the terminal (e.g., https://abc123.gradio.live)
-3. Open /lib/quantum-config.ts
-4. Replace the GRADIO_URL value with your new URL
-5. Save the file - the app will use the new URL
+To update the Gradio URLs:
+
+1. Start your Healthcare quantum backend
+   - Copy the public URL (e.g., https://abc123.gradio.live)
+   - Paste it as HEALTHCARE_GRADIO_URL
+
+2. Start your Finance quantum backend
+   - Copy the public URL (e.g., https://def456.gradio.live)
+   - Paste it as FINANCE_GRADIO_URL
+
+3. Start your Cybersecurity quantum backend
+   - Copy the public URL (e.g., https://ghi789.gradio.live)
+   - Paste it as CYBERSECURITY_GRADIO_URL
+
+4. Save this file - the app will automatically use the new URLs
 `
