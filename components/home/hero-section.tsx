@@ -142,9 +142,10 @@ export function HeroSection() {
             onClick={(e) => e.stopPropagation()}
           >
             <iframe
-              src="https://drive.google.com/file/d/1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA/preview"
+              src="https://drive.google.com/file/d/1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA/preview?autoplay=1"
               className="w-full h-full"
-              allow="autoplay"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
               title="QADIS Demo Video"
               style={{ border: 'none' }}
             />
