@@ -138,20 +138,19 @@ export function HeroSection() {
           aria-label="Demo Video"
         >
           <div 
-            className="relative w-[90vw] max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-[90vw] max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black"
             onClick={(e) => e.stopPropagation()}
           >
-            <iframe
-              src="https://drive.google.com/file/d/1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA/preview?autoplay=1"
-              className="w-full h-full"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              title="QADIS Demo Video"
-              style={{ border: 'none' }}
+            <video
+              src="https://drive.google.com/uc?export=download&id=1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA"
+              className="w-full h-full object-contain"
+              autoPlay
+              controls
+              playsInline
             />
             <button
               onClick={() => setShowVideo(false)}
-              className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors"
+              className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors z-10"
               aria-label="Close video"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
