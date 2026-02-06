@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Play } from "lucide-react"
 import { useEffect, useState } from "react"
+import { VIDEO_CONFIG } from "@/lib/video-config"
 
 function AnimatedOrb({ 
   className, 
@@ -141,13 +142,23 @@ export function HeroSection() {
             className="relative w-[90vw] max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black"
             onClick={(e) => e.stopPropagation()}
           >
-            <video
-              src="https://drive.google.com/uc?export=download&id=1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA"
-              className="w-full h-full object-contain"
-              autoPlay
-              controls
-              playsInline
-            />
+            {VIDEO_CONFIG.DEMO_VIDEO_URL ? (
+              <video
+                src={VIDEO_CONFIG.DEMO_VIDEO_URL}
+                className="w-full h-full object-contain"
+                autoPlay
+                controls
+                playsInline
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-center text-white/70">
+                  <Play className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <p className="text-sm">Video not configured yet.</p>
+                  <p className="text-xs mt-1 opacity-60">Upload at /admin/upload-video</p>
+                </div>
+              </div>
+            )}
             <button
               onClick={() => setShowVideo(false)}
               className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors z-10"
