@@ -7,5 +7,5 @@
 
 export const VIDEO_CONFIG = {
   // Paste your Vercel Blob video URL here after uploading
-  DEMO_VIDEO_URL: "",
+  DEMO_VIDEO_URL: "https://ckchxnmourzzkvnn.public.blob.vercel-storage.com/Video_Spelling_Correction_and_Generation.mp4",
 }
