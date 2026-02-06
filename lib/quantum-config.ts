@@ -8,13 +8,13 @@ export const QUANTUM_BACKEND_CONFIG = {
   // ===========================================
   
   // Healthcare Gradio Backend URL
-  HEALTHCARE_GRADIO_URL: "https://80e3e3d1aa216b300b.gradio.live",
+  HEALTHCARE_GRADIO_URL: "https://0910b781b8aeb9a303.gradio.live",
   
   // Finance Gradio Backend URL
-  FINANCE_GRADIO_URL: "https://542445116e84765c3f.gradio.live/",
+  FINANCE_GRADIO_URL: "https://52aa84488b408710aa.gradio.live/",
   
   // Cybersecurity Gradio Backend URL
-  CYBERSECURITY_GRADIO_URL: "https://40a12aa79675eee111.gradio.live/",
+  CYBERSECURITY_GRADIO_URL: "https://db52742a4747388881.gradio.live",
   
   // ===========================================
   // API ENDPOINTS (append to domain URL)
