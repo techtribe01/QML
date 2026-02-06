@@ -16,7 +16,7 @@ const demoOptions = [
     icon: Building2,
     color: "finance",
     bgGradient: "from-finance/10 to-finance/5",
-    colabUrl: "#",
+    colabUrl: "https://81e153101d0b2f3673.gradio.live",
     features: ["10K+ sample transactions", "Real-time scoring", "ROC curve analysis"],
     duration: "~5 min"
   },
@@ -204,10 +204,10 @@ export default function DemoPage() {
                       style={{ backgroundColor: `var(--${demo.color})` }}
                       asChild
                     >
-                      <Link href={demo.colabUrl} className="flex items-center justify-center gap-2">
+                      <a href={demo.colabUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
                         <span>Launch Demo</span>
                         <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 </div>

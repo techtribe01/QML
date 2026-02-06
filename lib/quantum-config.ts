@@ -11,7 +11,7 @@ export const QUANTUM_BACKEND_CONFIG = {
   HEALTHCARE_GRADIO_URL: "https://your-healthcare-gradio-url.gradio.live",
   
   // Finance Gradio Backend URL
-  FINANCE_GRADIO_URL: "https://https://81e153101d0b2f3673.gradio.live",
+  FINANCE_GRADIO_URL: "https://81e153101d0b2f3673.gradio.live",
   
   // Cybersecurity Gradio Backend URL
   CYBERSECURITY_GRADIO_URL: "https://your-cybersecurity-gradio-url.gradio.live",
