@@ -98,8 +98,21 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background Orbs */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Video Background */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <iframe
+          src="https://drive.google.com/file/d/1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA/preview"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full min-h-full h-[56.25vw] pointer-events-none"
+          allow="autoplay"
+          title="QADIS Background Video"
+          style={{ border: 'none' }}
+        />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
+      </div>
+      
+      {/* Subtle Orbs on top of video */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <AnimatedOrb 
           color="#1640FF" 
           className="top-1/4 -left-20" 
@@ -119,12 +132,6 @@ export function HeroSection() {
           size="w-[400px] h-[400px]"
         />
       </div>
-      
-      {/* Grid Pattern */}
-      <GridPattern />
-      
-      {/* Noise Texture */}
-      <div className="absolute inset-0 noise-overlay" />
       
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
