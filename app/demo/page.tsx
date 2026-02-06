@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Building2, Heart, Shield, Play, ExternalLink, Clock, Sparkles, CheckCircle2 } from "lucide-react"
 import { useState } from "react"
+import { QUANTUM_BACKEND_CONFIG } from "@/lib/quantum-config"
 
 const demoOptions = [
   {
@@ -16,7 +17,7 @@ const demoOptions = [
     icon: Building2,
     color: "finance",
     bgGradient: "from-finance/10 to-finance/5",
-    colabUrl: "https://81e153101d0b2f3673.gradio.live",
+    gradioUrl: QUANTUM_BACKEND_CONFIG.FINANCE_GRADIO_URL,
     features: ["10K+ sample transactions", "Real-time scoring", "ROC curve analysis"],
     duration: "~5 min"
   },
@@ -28,7 +29,7 @@ const demoOptions = [
     icon: Heart,
     color: "healthcare",
     bgGradient: "from-healthcare/10 to-healthcare/5",
-    colabUrl: "#",
+    gradioUrl: QUANTUM_BACKEND_CONFIG.HEALTHCARE_GRADIO_URL,
     features: ["Claims dataset", "Pattern visualization", "Risk scoring"],
     duration: "~7 min"
   },
@@ -40,7 +41,7 @@ const demoOptions = [
     icon: Shield,
     color: "cyber",
     bgGradient: "from-cyber/10 to-cyber/5",
-    colabUrl: "#",
+    gradioUrl: QUANTUM_BACKEND_CONFIG.CYBERSECURITY_GRADIO_URL,
     features: ["Live event stream", "Threat classification", "Alert dashboard"],
     duration: "~6 min"
   },
@@ -204,7 +205,7 @@ export default function DemoPage() {
                       style={{ backgroundColor: `var(--${demo.color})` }}
                       asChild
                     >
-                      <a href={demo.colabUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                      <a href={demo.gradioUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
                         <span>Launch Demo</span>
                         <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </a>
