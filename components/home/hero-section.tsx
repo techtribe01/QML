@@ -91,6 +91,7 @@ function StatItem({ value, label, delay }: { value: string; label: string; delay
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false)
+  const [showVideo, setShowVideo] = useState(false)
   
   useEffect(() => {
     setMounted(true)
@@ -98,21 +99,8 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
-        <iframe
-          src="https://drive.google.com/file/d/1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA/preview"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.78vh] min-w-full min-h-full h-[56.25vw] pointer-events-none"
-          allow="autoplay"
-          title="QADIS Background Video"
-          style={{ border: 'none' }}
-        />
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
-      </div>
-      
-      {/* Subtle Orbs on top of video */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated Background Orbs */}
+      <div className="absolute inset-0 overflow-hidden">
         <AnimatedOrb 
           color="#1640FF" 
           className="top-1/4 -left-20" 
@@ -132,6 +120,44 @@ export function HeroSection() {
           size="w-[400px] h-[400px]"
         />
       </div>
+      
+      {/* Grid Pattern */}
+      <GridPattern />
+      
+      {/* Noise Texture */}
+      <div className="absolute inset-0 noise-overlay" />
+
+      {/* Video Modal */}
+      {showVideo && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={() => setShowVideo(false)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowVideo(false) }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Demo Video"
+        >
+          <div 
+            className="relative w-[90vw] max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <iframe
+              src="https://drive.google.com/file/d/1ZKSAq3-511wlIsmM1XXONSEx5wrCP4eA/preview"
+              className="w-full h-full"
+              allow="autoplay"
+              title="QADIS Demo Video"
+              style={{ border: 'none' }}
+            />
+            <button
+              onClick={() => setShowVideo(false)}
+              className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors"
+              aria-label="Close video"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      )}
       
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
@@ -192,15 +218,13 @@ export function HeroSection() {
             <Button 
               size="lg" 
               variant="outline" 
-              className="h-14 px-8 bg-white/60 backdrop-blur-sm border-border/60 hover:bg-white hover:border-border text-foreground font-medium rounded-full group transition-all duration-300" 
-              asChild
+              className="h-14 px-8 bg-white/60 backdrop-blur-sm border-border/60 hover:bg-white hover:border-border text-foreground font-medium rounded-full group transition-all duration-300"
+              onClick={() => setShowVideo(true)}
             >
-              <Link href="/visualizer" className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-finance to-healthcare flex items-center justify-center text-white">
-                  <Play className="w-3 h-3 fill-current" />
-                </div>
-                Watch Demo
-              </Link>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-finance to-healthcare flex items-center justify-center text-white">
+                <Play className="w-3 h-3 fill-current" />
+              </div>
+              Watch Demo
             </Button>
           </div>
           
